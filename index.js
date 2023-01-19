@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser'); //interpret client requests to data formats 
-const cors = require('cors'); //specify the sources that are allowed to make requests to my localhost 
-const helmet = require('helmet'); //secure server by adding http headers
-const morgan = require('morgan'); //log req & res (URL, methods, and status codes)
+
 const {Pool, Client} = require('pg');
 
 
