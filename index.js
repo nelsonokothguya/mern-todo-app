@@ -4,7 +4,15 @@ const mongoose = require('mongoose');
 
 
 //CONNECT TO MONGODB DATABASE
-mongoose.connect('mongodb://localhost/todos', {useNewUrlParser: true})
+mongoose.connect('mongodb://localhost/todos', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+
+.then(() => console.log('Connected to MongoDB...'))
+.catch(err => console.error('Could not connect to MongoDB...', err));
+
+
 mongoose.set('strictQuery', true);
 
 const Schema = mongoose.Schema;
@@ -34,7 +42,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 // ROUTES
 //ALL TODOS
-app.get('/todos', (request, response) => {
+app.get('/', (request, response) => {
     //find all todos in the database
 
     Todo.find({}, (error, todos) => {
@@ -42,6 +50,7 @@ app.get('/todos', (request, response) => {
             response.status(500).send(error)
         } else {
             response.send(todos)
+ 
         }
     })
     
@@ -50,7 +59,7 @@ app.get('/todos', (request, response) => {
 // CREATE TODOS
 
 app.post('/todos', (request, response) => {
-    //create todo
+     // Create a new Todo instance
 
     const todo = new Todo({text: request.body.text});
 
