@@ -52,6 +52,7 @@
     "negotiator": "^0.6.3",
     "node-domexception": "^1.0.0",
     "node-fetch": "^3.3.0",
+    "nodemon": "^2.0.20",
     "object-inspect": "^1.12.3",
     "on-finished": "^2.4.1",
     "parseurl": "^1.3.3",
@@ -95,5 +96,10 @@
   "bugs": {
     "url": "https://github.com/nelsonkimani63/class-todo-app/issues"
   },
-  "homepage": "https://github.com/nelsonkimani63/class-todo-app#readme"
+  "homepage": "https://github.com/nelsonkimani63/class-todo-app#readme",
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.2.0"
+  }
 }
