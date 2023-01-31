@@ -3,6 +3,8 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 
+const authentication = require('./authentication');
+
 
 //CONNECT TO MONGODB DATABASE
 mongoose.connect('mongodb://localhost/todos', {
@@ -58,6 +60,7 @@ app.get('/', (request, response) => {
         if (error) {
             response.status(500).send(error)
         } else {
+            response.set('Cache-Control', 'public, max-age=300')
             response.send(todos)
  
         }

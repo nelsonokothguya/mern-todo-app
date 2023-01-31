@@ -7,7 +7,7 @@ export default class TodoList extends React.Component {
     constructor(props) {
         super (props);
         this.state = {
-            todoItems: []
+            todoList: []
         }
 
     }
