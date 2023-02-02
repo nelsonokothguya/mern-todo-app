@@ -3,20 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const Todo = require('./schema');
 
-
-Todo.updateMany({}, {
-    $set: {
-      priority: 'Low',
-      assignedTo: 'John Doe'
-    }
-  }, (error, result) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log(`${result.n} todos updated with new schema.`);
-    }
-  });
-
+const authentication = require('./authentication');
 
 const app = express();
 const PORT = 3000
@@ -33,23 +20,21 @@ app.use(cors({
   
 
 // ROUTES
-//ALL TODOS
+//ALL TODO ITEMS
 app.get('/', (request, response) => {
-    //find all todos in the database
-
-    Todo.find({}, (error, todos) => {
+    Todo.find({}, (error, todoCollection) => {
         if (error) {
             response.status(500).send(error)
         } else {
             response.set('Cache-Control', 'public, max-age=300')
-            response.send(todos)
+            response.send(todoCollection)
  
         }
     })
     
 });
 
-// CREATE TODOS
+// CREATE TODO ITEM
 
 app.post('/todos', (request, response) => {
      // Create a new Todo instance
@@ -71,7 +56,7 @@ app.post('/todos', (request, response) => {
 });
 
 
-//EDIT TODOS
+//EDIT TODO ITEM
 
 app.put('/todos/:id', (request, response)=> {
     Todo.findById(request.params.id, (error, todo) => {
@@ -92,7 +77,7 @@ app.put('/todos/:id', (request, response)=> {
 
 
 
-// REMOVE TODOS
+// REMOVE TODO ITEM
 
 app.delete('/todos/:id', (request, response) => {
     Todo.findByIdAndRemove(request.params.id, (error, todo)=> {
@@ -109,8 +94,7 @@ app.delete('/todos/:id', (request, response) => {
 
 
 
-// LISTENING FUNCTION
-
+// LISTENING PORT
 app.listen(PORT, ()=> {
     console.log(`Listening to Secure PORT ${PORT}`)
 })
