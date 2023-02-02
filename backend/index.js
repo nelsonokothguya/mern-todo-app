@@ -1,43 +1,24 @@
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose');
-
-const authentication = require('./authentication');
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const Todo = require('./schema');
 
 
-//CONNECT TO MONGODB DATABASE
-mongoose.connect('mongodb://localhost/todos', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-
-.then(() => console.log('Connected to MongoDB...'))
-.catch(err => console.error('Could not connect to MongoDB...', err));
-
-
-mongoose.set('strictQuery', true);
-
-const Schema = mongoose.Schema;
-const TodoSchema = new Schema({
-    text: {
-      type: String,
-      required: true
-    },
-    completed: {
-      type: Boolean,
-      default: false
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
+Todo.updateMany({}, {
+    $set: {
+      priority: 'Low',
+      assignedTo: 'John Doe'
+    }
+  }, (error, result) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log(`${result.n} todos updated with new schema.`);
     }
   });
 
-const Todo = mongoose.model('Todo', TodoSchema);
 
-
-const app = express()
+const app = express();
 const PORT = 3000
 
 app.use(bodyParser.json());
@@ -73,7 +54,11 @@ app.get('/', (request, response) => {
 app.post('/todos', (request, response) => {
      // Create a new Todo instance
 
-    const todo = new Todo({text: request.body.text});
+    const todo = new Todo({
+        text: request.body.text,
+        priority: request.body.priority,
+        assignedTo: request.body.assignedTo
+    });
 
     //save the created todo to the DB
     todo.save((error, todo)=> {
