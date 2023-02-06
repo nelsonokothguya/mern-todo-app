@@ -3,7 +3,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const Todo = require('./schema');
 
-const authentication = require('./authentication');
+
+
+
+
 
 const app = express();
 const PORT = 3000
@@ -40,9 +43,7 @@ app.post('/todos', (request, response) => {
      // Create a new Todo instance
 
     const todo = new Todo({
-        text: request.body.text,
-        priority: request.body.priority,
-        assignedTo: request.body.assignedTo
+        text: request.body.text
     });
 
     //save the created todo to the DB

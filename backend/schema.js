@@ -27,15 +27,8 @@ const Schema = mongoose.Schema;
       type: Date,
       default: Date.now
     },
-    priority: {
-    type: String,
-    required: true
-    },
-    assignedTo: {
-    type: String,
-    required: true,
-    }
   });
+
 
 
   
