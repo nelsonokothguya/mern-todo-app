@@ -1,9 +1,6 @@
 
 import React from "react";
 
-
-
-
 export default class Form extends React.Component {
     constructor(props) {
       super(props);
@@ -49,8 +46,6 @@ export default class Form extends React.Component {
 
     render() {
       return (
-
-       
           <form
         onSubmit={this.handleSubmit}>
           <input type="text" 
