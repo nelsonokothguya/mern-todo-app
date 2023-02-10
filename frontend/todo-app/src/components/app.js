@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "./Form";
-import TodoCollection from "./TodoCollection";
+import TodoList from "./TodoList";
 
 
 
@@ -9,7 +9,7 @@ export default class App extends React.Component {
         return (
         <div>
             <Form/>
-            <TodoCollection />
+            <TodoList/>
         </div>
         )
     }

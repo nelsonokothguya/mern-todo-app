@@ -1,65 +1,33 @@
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import React from "react";
-
-export default class Form extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        inputValue: ""
-      };
-
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-     
-    };
-
-    handleChange = (e) => {
-      this.setState({
-        inputValue: e.target.value
-      });
-    };
-
-
-    handleSubmit = (e) => {
-      e.preventDefault();
-
-      //POST REQUEST
-      fetch('http://localhost:3000/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: this.state.inputValue })
+class Form extends Component {
+  handleAddTodo = text => {
+    axios.post('http://localhost:3000/todos', { text })
+      .then(res => {
+        const newTodo = res.data;
+        this.props.onAddTodo(newTodo);
       })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Successfully created a todo item:', data);
-      })
-      .catch((error) => {
-        console.error('Error creating a todo:', error);
+      .catch(err => {
+        console.error(err);
       });
-    };
-
-
-
-
-
-
-
-    render() {
-      return (
-          <form
-        onSubmit={this.handleSubmit}>
-          <input type="text" 
-          value={this.state.inputValue}
-          onChange={this.handleChange}/>
-
-          <button type="submit">Submit</button>
-        </form>
-
-    
-      )
-
-    }
   }
-  
-  
 
+  render() {
+    return (
+      <form onSubmit={e => {
+        e.preventDefault();
+        this.handleAddTodo(this.input.value);
+        this.input.value = '';
+      }}>
+        <input
+          type="text"
+          ref={node => this.input = node}
+        />
+        <button type="submit">Add Todo</button>
+      </form>
+    );
+  }
+}
+
+export default Form;
