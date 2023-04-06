@@ -1,55 +1,42 @@
 import * as React from "react";
 
-import { observable, action } from "mobx";
-import axios from "axios";
-import { observer } from "mobx-react";
-
-interface TodoDocument {
-  _id: string;
-  text: string;
-  completed: boolean;
+export interface Todo {
+	_id: string;
+	text: string;
+	completed: boolean;
 }
 
-interface TodoListState {
-  todoList: TodoDocument[];
+export interface TodoListProps {
+	todos: Todo[];
+	onDeleteTodo: (id: string) => void;
 }
 
-export default class TodoList extends React.Component<{}, TodoListState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      todoList: [],
-    };
-  }
+export class TodoList extends React.Component<TodoListProps> {
+	render() {
+		const { todos, onDeleteTodo } = this.props;
+		return (
+			<div>
+				<h1>Todo List</h1>
+				<ul style={{listStyle: "none", padding: 0}}>
+					{todos.map((todo: Todo) => (
+						<li key={todo._id}>
+							<input
+								type="checkbox"
+								checked={
+									todo.completed
+								}
+								onChange={() =>
+									onDeleteTodo(
+										todo._id
+									)
+								}
+							/>
 
-  componentDidMount() {
-    axios
-      .get("http://localhost:3000/todos")
-      .then((response) => this.setState({ todoList: response.data }))
-      .catch((error) => console.log(error));
-  }
-
-  handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {};
-
-  render() {
-    return (
-      <div>
-        {this.state.todoList.map((todoDocument) => (
-          <div>
-            <ul>
-              <label>
-                <input
-                  type="checkbox"
-                  key={todoDocument._id}
-                  onChange={this.handleCheckBox}
-                />
-              </label>
-
-              <li key={todoDocument._id}>{todoDocument.text}</li>
-            </ul>
-          </div>
-        ))}
-      </div>
-    );
-  }
+						<span style = {{marginLeft: "10px"}}>	{todo.text} </span>
+						</li>
+					))}
+				</ul>
+			</div>
+		);
+	}
 }
