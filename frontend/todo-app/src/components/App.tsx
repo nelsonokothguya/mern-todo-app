@@ -1,16 +1,14 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as React from "react";
 import { Form } from "./Form";
-import { TodoList } from "./TodoList";
-
-interface Todo {
-	_id: string;
-	text: string;
-	completed: boolean;
-}
+import { TodoList, TodoListProps } from "./TodoList";
+import { DeletedTodoList, DeletedTodoListProps } from "./DeletedTodoList";
+import { Todo } from "./Todo";
+import { DeletedTodoItem, DeletedTodo } from "./DeletedTodo";
 
 interface AppState {
 	todos: Todo[];
+	deletedtodos: DeletedTodo[];
 }
 
 export default class App extends React.Component<{}, AppState> {
@@ -18,14 +16,18 @@ export default class App extends React.Component<{}, AppState> {
 		super(props);
 		this.state = {
 			todos: [],
+			deletedtodos: [],
 		};
 
 		this.handleAddTodo = this.handleAddTodo.bind(this);
-		this.handleDeleteTodo = this.handleDeleteTodo.bind(this);
+
+		this.handleToggleComplete =
+			this.handleToggleComplete.bind(this);
 	}
 
 	componentDidMount() {
 		this.fetchData();
+		this.fetchDeletedData();
 	}
 
 	fetchData() {
@@ -36,18 +38,51 @@ export default class App extends React.Component<{}, AppState> {
 			.catch((error: AxiosError) => console.error(error));
 	}
 
+	fetchDeletedData() {
+		axios.get<DeletedTodo[]>(
+			"http://localhost:8080/deletedtodos"
+		)
+			.then((response: AxiosResponse<DeletedTodo[]>) =>
+				this.setState({ deletedtodos: response.data })
+			)
+			.catch((error: AxiosError) => console.error(error));
+	}
+
 	handleAddTodo(newTodo: Todo) {
 		this.setState({ todos: [...this.state.todos, newTodo] });
 	}
 
-	handleDeleteTodo(id: string) {
+	handleToggleComplete(id: string, completed: boolean) {
 		axios.delete(`http://localhost:8080/todos/${id}`)
 			.then((response: AxiosResponse) => {
-				this.setState({
-					todos: this.state.todos.filter(
-						(todo) => todo._id !== id
-					),
-				});
+				const deletedTodo = this.state.todos.find(
+					(todo) => todo._id === id
+				);
+
+				axios.post(
+					"http://localhost:8080/deletedtodos",
+					deletedTodo
+				)
+					.then((response: AxiosResponse) => {
+						this.setState(
+							(
+								prevState: AppState
+							) => {
+								return {
+									todos: prevState.todos.filter(
+										(
+											todo
+										) =>
+											todo._id !==
+											id
+									),
+								};
+							}
+						);
+					})
+					.catch((error: AxiosError) => {
+						console.error(error);
+					});
 			})
 			.catch((error: AxiosError) => {
 				console.error(error);
@@ -60,7 +95,13 @@ export default class App extends React.Component<{}, AppState> {
 				<Form onAddTodo={this.handleAddTodo} />
 				<TodoList
 					todos={this.state.todos}
-					onDeleteTodo={this.handleDeleteTodo}
+					onToggleComplete={
+						this.handleToggleComplete
+					}
+				/>
+
+				<DeletedTodoList
+					deletedtodos={this.state.deletedtodos}
 				/>
 			</div>
 		);

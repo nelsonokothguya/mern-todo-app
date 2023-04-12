@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios, { AxiosError } from "axios";
-import { Todo } from "./TodoList";
+import { Todo } from "./Todo";
 
 interface FormProps {
 	onAddTodo: (todo: Todo) => void;
@@ -32,7 +32,7 @@ export class Form extends React.Component<FormProps, State> {
 		})
 			.then((response: { data: Todo }) => {
 				this.props.onAddTodo(response.data);
-				this.props.onAddTodo(response.data);
+
 				this.setState({ text: "" });
 			})
 			.catch((error: AxiosError) => console.log(error));
