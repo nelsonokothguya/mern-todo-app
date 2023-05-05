@@ -1,30 +1,25 @@
 import * as React from "react";
 import { DeletedTodoItem, DeletedTodo } from "./DeletedTodo";
 
-
-
 export interface DeletedTodoListProps {
-	deletedtodos: DeletedTodo[];
+   deletedtodos: DeletedTodo[];
 }
 
 export class DeletedTodoList extends React.Component<DeletedTodoListProps> {
-	render() {
-		const { deletedtodos } = this.props;
-console.log("Deleted Todos:", deletedtodos); 
-		return (
-			<div>
-				<h1>Deleted Todos</h1>
+   render() {
+      const { deletedtodos } = this.props;
 
-			{deletedtodos.map((deletedtodo)=> (
-				<DeletedTodoItem 
-					key={deletedtodo._id}
-					deletedTodo = {deletedtodo}
-				/>
-			))}
+      return (
+         <div>
+            <h1>Deleted Todos</h1>
 
-
-
-			</div>
-		);
-	}
+            {deletedtodos.map((deletedtodo) => (
+               <DeletedTodoItem
+                  key={deletedtodo._id}
+                  deletedTodo={deletedtodo}
+               />
+            ))}
+         </div>
+      );
+   }
 }
