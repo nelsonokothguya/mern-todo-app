@@ -47,10 +47,10 @@ app.delete("/todos/:id", async (request, response) => { try { const
 app.delete("/ongoingtodos/:id", async (request, response) => { try { const
 	deletedSingleOngoingTodoId = request.params.id; const
 	deletedSingleOngoingTodo = await OngoingTodo.findByIdAndDelete(
-	deletedSingleOngoingTodoId); if (deletedSingleOngoingTodo) {
-		response.send(deletedSingleOngoingTodo); } else {
-			response.status(404).send({ message: "OngoingTodo not
-				found" }); } } catch (error) {
-				response.status(500).send(error); } });
+		deletedSingleOngoingTodoId); if (deletedSingleOngoingTodo) {
+			response.send(deletedSingleOngoingTodo); } else {
+				response.status(404).send({ message:
+					"OngoingTodo not found" }); } } catch
+	(error) { response.status(500).send(error); } });
 
 app.listen(PORT, () => { console.log(`Listening to Secure PORT ${PORT}`); });
