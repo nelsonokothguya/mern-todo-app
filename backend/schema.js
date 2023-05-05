@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost/todos", { useNewUrlParser: true,
+mongoose .connect("mongodb://localhost/tododb", { useNewUrlParser: true,
 	useUnifiedTopology: true, })
 
 	.then(() => console.log("Connected to MongoDB...")) .catch((err) =>
@@ -12,9 +12,14 @@ const Schema = mongoose.Schema; const TodoSchema = new Schema({ text: { type:
 	String, required: true }, completed: { type: Boolean, default: false },
 	createdAt: { type: Date, default: Date.now }, });
 
-const DeletedTodoSchema = new Schema({ text: { type: String, required: true },
+const OngoingTodoSchema = new Schema({ text: { type: String, required: true },
 	completed: { type: Boolean, default: false }, createdAt: { type: Date,
 		default: Date.now }, });
 
+const DeletedTodoSchema = new Schema({ text: { type: String, required: true },
+	completed: { type: Boolean, default: true }, createdAt: { type: Date,
+		default: Date.now }, });
+
 module.exports = { Todo: mongoose.model("Todo", TodoSchema), DeletedTodo:
-	mongoose.model("DeletedTodo", DeletedTodoSchema), };
+	mongoose.model("DeletedTodo", DeletedTodoSchema), OngoingTodo:
+	mongoose.model("OngoingTodo", OngoingTodoSchema), };
